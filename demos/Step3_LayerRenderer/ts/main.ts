@@ -1,9 +1,9 @@
-import * as Map from "esri/Map";
+import * as Color from "esri/Color";
 import * as FeatureLayer from "esri/layers/FeatureLayer";
-import * as MapView from "esri/views/MapView";
+import * as Map from "esri/Map";
 import * as UniqueValueRenderer from "esri/renderers/UniqueValueRenderer";
 import * as SimpleMarkerSymbol from "esri/symbols/SimpleMarkerSymbol";
-import * as Color from "esri/Color"
+import * as MapView from "esri/views/MapView";
 
 
 /******************************************************************
@@ -16,22 +16,22 @@ import * as Color from "esri/Color"
 
 // Symbol for beaches with Lifeguards
 const lifeSym = new SimpleMarkerSymbol({
-    size: 14,
     color: new Color("#4AB541"),
     outline: { // Autocasts as new SimpleLineSymbol()
         color: new Color([255, 255, 255, 0.50]), // Autocasts as new Color()
         width: 2
-    }
+    },
+    size: 14
 });
 
 // Symbol for beaches without Lifeguards
 const nolifeSym = new SimpleMarkerSymbol({
-    size: 14,
     color: new Color("#E17D1E"),
     outline: { // Autocasts as new SimpleLineSymbol()
         color: new Color([255, 255, 255, 0.50]), // Autocasts as new Color()
         width: 2
-    }
+    },
+    size: 14
 });
 
 /******************************************************************
@@ -45,17 +45,17 @@ const nolifeSym = new SimpleMarkerSymbol({
     ******************************************************************/
 
 const beachRenderer = new UniqueValueRenderer({
-    defaultSymbol: lifeSym,
     defaultLabel: "Beaches with lifeguards",
+    defaultSymbol: lifeSym,
     field: "Lifeguards",
     uniqueValueInfos: [{
-        value: "Y", //attribute value for features with lifeguards
+        label: "Beaches with lifeguards",
         symbol: lifeSym,
-        label: "Beaches with lifeguards"
+        value: "Y" // attribute value for features with lifeguards
     }, {
-        value: "N", //attribute value for features without lifeguards
+        label: "Beaches without lifeguards",
         symbol: nolifeSym,
-        label: "Beaches without lifeguards"
+        value: "N" // attribute value for features without lifeguards
     }]
 });
 
@@ -63,16 +63,16 @@ const beachRenderer = new UniqueValueRenderer({
 
 // Create beaches featurelayer and set the renderer on the layer
 const beaches = new FeatureLayer({
-    url: "http://services.arcgis.com/oxInpRhVIBxlo4pO/arcgis/rest/services/Beaches/FeatureServer/0",
     // set renderer
-    renderer: beachRenderer
+    renderer: beachRenderer,
+    url: "http://services.arcgis.com/oxInpRhVIBxlo4pO/arcgis/rest/services/Beaches/FeatureServer/0",
 });
 
 // Create Neighborhoods featurelayer and set opacity on layer
 const hoods = new FeatureLayer({
-    url: "http://services.arcgis.com/OUDgwkiMsqiL8Tvp/arcgis/rest/services/NewSDNeighborhoods/FeatureServer/0",
     // set opacity
-    opacity: 0.50
+    opacity: 0.50,
+    url: "http://services.arcgis.com/OUDgwkiMsqiL8Tvp/arcgis/rest/services/NewSDNeighborhoods/FeatureServer/0"
 });
 
 // Step 3: Pass in an array of layers to the map's constructor
@@ -83,9 +83,8 @@ const map = new Map({
 
 // Step 4: Create the View and assign a container 'div' and pass in the map from above. Optionally, specify zoom/center
 const view = new MapView({
+    center: [-117.16866016384272, 32.776725339767964],
     container: "viewDiv",
-    map: map,
-    zoom: 12,
-    center: [-117.16866016384272, 32.776725339767964]
+    map,
+    zoom: 12
 });
-

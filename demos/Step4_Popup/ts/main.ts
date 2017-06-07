@@ -1,30 +1,30 @@
-import * as Map from "esri/Map";
+import * as Color from "esri/Color"
 import * as FeatureLayer from "esri/layers/FeatureLayer";
-import * as MapView from "esri/views/MapView";
+import * as Map from "esri/Map";
+import * as PopupTemplate from "esri/PopupTemplate";
 import * as UniqueValueRenderer from "esri/renderers/UniqueValueRenderer";
 import * as SimpleMarkerSymbol from "esri/symbols/SimpleMarkerSymbol";
-import * as Color from "esri/Color"
-import * as PopupTemplate from "esri/PopupTemplate";
+import * as MapView from "esri/views/MapView";
 import * as Popup from "esri/widgets/Popup";
 
 // Symbol for beaches with Lifeguards
-var lifeSym = new SimpleMarkerSymbol({
-size: 14,
+const lifeSym = new SimpleMarkerSymbol({
 color: new Color("#4AB541"),
-outline: { // Autocasts as new SimpleLineSymbol()
-    color: new Color([255, 255, 255, 0.50]), // Autocasts as new Color()
-    width: 2
-}
+    outline: { // Autocasts as new SimpleLineSymbol()
+        color: new Color([255, 255, 255, 0.50]), // Autocasts as new Color()
+        width: 2
+    },
+    size: 14
 });
 
 // Symbol for beaches without Lifeguards
-var nolifeSym = new SimpleMarkerSymbol({
-size: 14,
-color: new Color("#E17D1E"),
-outline: { // Autocasts as new SimpleLineSymbol()
-    color: new Color([255, 255, 255, 0.50]), // Autocasts as new Color()
-    width: 2
-}
+const nolifeSym = new SimpleMarkerSymbol({
+    color: new Color("#E17D1E"),
+    outline: { // Autocasts as new SimpleLineSymbol()
+        color: new Color([255, 255, 255, 0.50]), // Autocasts as new Color()
+        width: 2
+    },
+    size: 14
 });
 
 /******************************************************************
@@ -37,19 +37,19 @@ outline: { // Autocasts as new SimpleLineSymbol()
 *
 ******************************************************************/
 
-var beachRenderer = new UniqueValueRenderer({
-defaultSymbol: lifeSym,
-defaultLabel: "Beaches with lifeguards",
-field: "Lifeguards",
-uniqueValueInfos: [{
-    value: "Y",
-    symbol: lifeSym,
-    label: "Beaches with lifeguards"
-}, {
-    value: "N",
-    symbol: nolifeSym,
-    label: "Beaches without lifeguards on duty"
-}]
+const beachRenderer = new UniqueValueRenderer({
+    defaultLabel: "Beaches with lifeguards",
+    defaultSymbol: lifeSym,
+    field: "Lifeguards",
+    uniqueValueInfos: [{
+        label: "Beaches with lifeguards",
+        symbol: lifeSym,
+        value: "Y"
+    }, {
+        label: "Beaches without lifeguards on duty",
+        symbol: nolifeSym,
+        value: "N"
+    }]
 });
 
 /******************************************************************
@@ -59,85 +59,79 @@ uniqueValueInfos: [{
  ******************************************************************/
 
 // Step 1: Create the template
-var popupTemplate = new PopupTemplate({
-title: "<b>Beach: {NAME}</b>",
-// Step 2: Specify the content, first set the display fields
-content: [{
-    type: "fields",
-    fieldInfos: [{
-    fieldName: "ADDRESS",
-    visible: true,
-    label: "Address: "
-    }, {
-    fieldName: "Lifeguards",
-    visible: true,
-    label: "Lifeguards on duty: "
-    }, {
-    fieldName: "Swimming",
-    visible: true,
-    label: "Swimming allowed: "
-    }, {
-    fieldName: "Surfing",
-    visible: true,
-    label: "Surfing allowed: "
-    }, {
-    fieldName: "URL",
-    visible: true,
-    label: "Beach website with additional info: "
-    }]
-}, {
-    // Step 3: Specify the second type of popup element to display, in this case, images
-    // there is an "image" field in the feature service that points to an online image
-    type: "media",
-    mediaInfos: [{
-    type: "image",
-    value: {
-        sourceURL: "{Image}"
-    }
-    }]
-}
-]
+const popupTemplate = new PopupTemplate({
+    // Step 2: Specify the content, first set the display fields
+    content: [{
+        fieldInfos: [{
+                fieldName: "ADDRESS",
+                label: "Address: ",
+                visible: true
+            },  {
+                fieldName: "Lifeguards",
+                label: "Lifeguards on duty: ",
+                visible: true
+            },  {
+                fieldName: "Swimming",
+                label: "Swimming allowed: ",
+                visible: true
+            },  {
+                fieldName: "Surfing",
+                label: "Surfing allowed: ",
+                visible: true
+            },  {
+                fieldName: "URL",
+                label: "Beach website with additional info: ",
+                visible: true
+            }],
+        type: "fields"
+    },  {
+        // Step 3: Specify the second type of popup element to display, in this case, images
+        // there is an "image" field in the feature service that points to an online image
+        mediaInfos: [{
+            type: "image",
+            value: {
+                sourceURL: "{Image}"
+            }
+        }],
+        type: "media"
+    }],
+    title: "<b>Beach: {NAME}</b>",
 });
 
 // Create beaches featurelayer and set the renderer on the layer
-var beaches = new FeatureLayer({
-url: "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/San_Diego_Beaches/FeatureServer/0",
+const beaches = new FeatureLayer({
+    // Step 4: Specify the outfields for the featurelayer in addition to passing in the template created above
+    outFields: ["*"],
+    popupTemplate,
 
-// Step 4: Specify the outfields for the featurelayer in addition to passing in the template created above
-outFields: ["*"],
-popupTemplate: popupTemplate,
-
-// set renderer
-renderer: beachRenderer
+    // set renderer
+    renderer: beachRenderer,
+    url: "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/San_Diego_Beaches/FeatureServer/0"
 });
 
 // Create Neighborhoods featurelayer and set opacity on layer
-var hoods = new FeatureLayer({
-url: "https://services.arcgis.com/OUDgwkiMsqiL8Tvp/arcgis/rest/services/NewSDNeighborhoods/FeatureServer/0",
-// set opacity
-opacity: 0.50,
-popupEnabled: false
+const hoods = new FeatureLayer({
+    // set opacity
+    opacity: 0.50,
+    popupEnabled: false,
+    url: "https://services.arcgis.com/OUDgwkiMsqiL8Tvp/arcgis/rest/services/NewSDNeighborhoods/FeatureServer/0"
 });
 
-var map = new Map({
-basemap: "topo",
-layers: [hoods, beaches]
+const map = new Map({
+    basemap: "topo",
+    layers: [hoods, beaches]
 });
 
-var view = new MapView({
-    container: "viewDiv",
-    map: map,
-    zoom: 12,
+const view = new MapView({
     center: [-117.16866016384272, 32.776725339767964],
-
-    //Step 5: Set the popup property in the MapView so that docking is enabled
-    // and dockoptions are set. In this case, the popup can be docked to the
-    //bottom right of the application.
+    container: "viewDiv",
+    map,
     popup: new Popup({
         dockEnabled: true,
         dockOptions: {
             buttonEnabled: true,
             position: "bottom-right"
         } as __esri.PopupDockOptions
-    })
+    }),
+    zoom: 12
 });
