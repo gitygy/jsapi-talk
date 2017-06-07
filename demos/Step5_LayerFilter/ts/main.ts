@@ -104,7 +104,8 @@ const view = new MapView({
       buttonEnabled: true,
       position: "bottom-right"
     } as __esri.PopupDockOptions
-  })
+  }),
+  zoom: 12
 });
 view.ui.add(document.getElementById("container"), "top-right");
 

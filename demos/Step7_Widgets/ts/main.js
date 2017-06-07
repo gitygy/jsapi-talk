@@ -1,4 +1,4 @@
-define(["require", "exports", "esri/WebMap", "esri/views/MapView", "esri/core/watchUtils", "esri/widgets/Legend"], function (require, exports, WebMap, MapView, watchUtils, Legend) {
+define(["require", "exports", "esri/core/watchUtils", "esri/views/MapView", "esri/WebMap", "esri/widgets/Legend"], function (require, exports, watchUtils, MapView, WebMap, Legend) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var map = new WebMap({
@@ -13,24 +13,15 @@ define(["require", "exports", "esri/WebMap", "esri/views/MapView", "esri/core/wa
         zoom: 12
     });
     view.ui.add(document.getElementById("container"), "top-right");
-    /******************************************************************
-     *
-     * Widget example - Add legend widget
-     *
-     ******************************************************************/
     view.then(function () {
         var beaches = map.layers.getItemAt(1);
-        // Step 1: Create the widget
         var legend = new Legend({
-            // Step 2: Specify any additional properties for the legend. In this case,
-            // we are just setting the view to where the legend should apply
             view: view,
             layerInfos: [{
                     layer: beaches,
                     title: "San Diego beaches"
                 }]
         });
-        // Step 3: Add the widget to the view's UI, specify the docking position as well
         view.ui.add(legend, "bottom-right");
     });
     var hoodsLayerView;
@@ -40,13 +31,9 @@ define(["require", "exports", "esri/WebMap", "esri/views/MapView", "esri/core/wa
         view.whenLayerView(hoods)
             .then(function (lyrView) {
             hoodsLayerView = lyrView;
-            // Make sure that the layer is not updating and currently fetching data
             return watchUtils.whenFalseOnce(hoodsLayerView, "updating");
-        }).then(function () {
-            // Step 3: Query all features in the layerview and return the results
-            return hoodsLayerView.queryFeatures();
-        }).then(function (features) {
-            //  Build a dropdown for each unique value in Neighborhood field
+        }).then(function () { return hoodsLayerView.queryFeatures(); })
+            .then(function (features) {
             features.forEach(function (feature) {
                 var featureId = feature.attributes.OBJECTID_1;
                 var uniqueVal = feature.attributes.NAME;
@@ -57,14 +44,11 @@ define(["require", "exports", "esri/WebMap", "esri/views/MapView", "esri/core/wa
                 featuresMap[featureId] = feature;
             });
         });
-        // Listen for the change event on the dropdown
-        // and set the layer's definition expression to the chosen value
         var select = document.getElementById("selectNeighborhood");
         select.onchange = function (e) {
             var featureId = select.value;
             var expr = select.value === "" ? "" : "OBJECTID_1 = '" + featureId + "'";
             hoods.definitionExpression = expr;
-            // Navigate to the selected feature;
             view.goTo(featuresMap[featureId]);
         };
     });
