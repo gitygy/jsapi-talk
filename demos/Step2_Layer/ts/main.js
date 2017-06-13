@@ -15,7 +15,7 @@ define(["require", "exports", "esri/layers/FeatureLayer", "esri/Map", "esri/view
         layers: [hoods, poi, beaches]
     });
     poi.watch("loadStatus", function (status) {
-        console.log("'" + poi.title + "'" + " " + status);
+        console.log("'" + poi.title + "' " + status);
         if (status === "failed") {
             console.log(poi.loadError);
         }

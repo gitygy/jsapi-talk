@@ -40,7 +40,7 @@ const beachRenderer = new UniqueValueRenderer({
 
 const beaches = new FeatureLayer({
     renderer: beachRenderer,
-    url: "http://services.arcgis.com/oxInpRhVIBxlo4pO/arcgis/rest/services/Beaches/FeatureServer/0",
+    url: "http://services.arcgis.com/oxInpRhVIBxlo4pO/arcgis/rest/services/Beaches/FeatureServer/0"
 });
 
 const hoods = new FeatureLayer({

@@ -3,7 +3,7 @@ require([
   "esri/layers/FeatureLayer",
   "esri/views/MapView",
   "dojo/domReady!"
-], function(Map, FeatureLayer, MapView) {
+], function (Map, FeatureLayer, MapView) {
 
   /******************************************************************
    *
@@ -12,19 +12,19 @@ require([
    ******************************************************************/
 
   var poi = new FeatureLayer({
-     //POI, notice how the rendering is carried over from the service
-     url: "http://services.arcgis.com/p7sQWBzf16BKvPsq/arcgis/rest/services/San_Diego_Places_to_Go/FeatureServer/0"
-   });
-
- var hoods = new FeatureLayer({
-  //Neighborhoods
-  url: "http://services.arcgis.com/OUDgwkiMsqiL8Tvp/arcgis/rest/services/NewSDNeighborhoods/FeatureServer/0"
+    // POI, notice how the rendering is carried over from the service
+    url: "http://services.arcgis.com/p7sQWBzf16BKvPsq/arcgis/rest/services/San_Diego_Places_to_Go/FeatureServer/0"
   });
 
-   var beaches = new FeatureLayer({
-  //  //beaches
+  var hoods = new FeatureLayer({
+    // Neighborhoods
+    url: "http://services.arcgis.com/OUDgwkiMsqiL8Tvp/arcgis/rest/services/NewSDNeighborhoods/FeatureServer/0"
+  });
+
+  var beaches = new FeatureLayer({
+    // Beaches
     url: "http://services.arcgis.com/oxInpRhVIBxlo4pO/arcgis/rest/services/Beaches/FeatureServer/0"
-    });
+  });
 
 
   // Option 1: Add layer(s) to map using constructor option
@@ -34,8 +34,8 @@ require([
   });
 
   //Option 2: use map.add method for single layer or addMany for multiple
-//  map.addMany([hoods, poi]);
-  poi.watch("loadStatus", function(status) {
+  //  map.addMany([hoods, poi]);
+  poi.watch("loadStatus", function (status) {
     // status types not-loaded, loading, loaded, failed
     console.log("'" + poi.title + "'" + " " + status);
     if (status === "failed") {
@@ -43,11 +43,10 @@ require([
     }
   });
 
-   view = new MapView({
+  view = new MapView({
+    center: [-117.16866016384272, 32.776725339767964],
     container: "viewDiv",
     map: map,
-    zoom: 12,
-    center: [-117.16866016384272, 32.776725339767964
-]
+    zoom: 12
   });
-  });
+});

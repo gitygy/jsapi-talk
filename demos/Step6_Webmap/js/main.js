@@ -23,14 +23,13 @@ require([
   });
 
   var view = new MapView({
+    center: [-117.16866016384272, 32.776725339767964],
     container: "viewDiv",
     // Step 2: Set the view's map to that of the specified webmap above
     map: map,
-    zoom: 12,
-    center: [-117.16866016384272, 32.776725339767964]
+    zoom: 12
   });
-  view.ui.add(dom.byId("container"), "top-right");
-
+  view.ui.add(document.getElementById("container"), "top-right");
 
   var hoodsLayerView;
   var featuresMap = {};
@@ -64,15 +63,14 @@ require([
 
     // Step 4: Listen for the change event on the dropdown
     // and set the layer's definition expression to the chosen value
-    var select = dom.byId("selectNeighborhood");
-    on(select, "change", function(e) {
-      var featureId = select.value;
-      var expr = select.value === "" ? "" : "OBJECTID_1 = '" + featureId + "'";
-      hoods.definitionExpression = expr;
+    var select = document.getElementById("selectNeighborhood");
+    select.onchange = function(e) {
+        var featureId = select.value;
+        var expr = select.value === "" ? "" : "OBJECTID_1 = '" + featureId + "'";
+        hoods.definitionExpression = expr;
 
-      // Navigate to the selected feature;
-      view.goTo(featuresMap[featureId]);
-    });
-
+        // Navigate to the selected feature;
+        view.goTo(featuresMap[featureId]);
+    };
   });
 });

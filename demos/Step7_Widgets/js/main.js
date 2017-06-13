@@ -16,13 +16,13 @@ require([
   });
 
   var view = new MapView({
+    center: [-117.16866016384272, 32.776725339767964],
     container: "viewDiv",
     map: map,
-    zoom: 12,
-    center: [-117.16866016384272, 32.776725339767964]
+    zoom: 12
   });
 
-  view.ui.add(dom.byId("container"), "top-right");
+  view.ui.add(document.getElementById("container"), "top-right");
   /******************************************************************
    *
    * Widget example - Add legend widget
@@ -64,10 +64,10 @@ require([
         features.forEach(function(feature) {
           var featureId = feature.attributes.OBJECTID_1;
           var uniqueVal = feature.attributes.NAME;
-          domConstruct.create("option", {
-            value: featureId,
-            innerHTML: uniqueVal
-          }, "selectNeighborhood");
+          var option = document.createElement("option");
+          option.value = featureId;
+          option.innerHTML = uniqueVal;
+          document.getElementById("selectNeighborhood").appendChild(option);
 
           featuresMap[featureId] = feature;
         });
@@ -75,15 +75,14 @@ require([
 
     // Listen for the change event on the dropdown
     // and set the layer's definition expression to the chosen value
-    var select = dom.byId("selectNeighborhood");
-    on(select, "change", function(e) {
-      var featureId = select.value;
-      var expr = select.value === "" ? "" : "OBJECTID_1 = '" + featureId + "'";
-      hoods.definitionExpression = expr;
+    var select = document.getElementById("selectNeighborhood");
+    select.onchange = function(e) {
+        var featureId = select.value;
+        var expr = select.value === "" ? "" : "OBJECTID_1 = '" + featureId + "'";
+        hoods.definitionExpression = expr;
 
-      // Navigate to the selected feature;
-      view.goTo(featuresMap[featureId]);
-    });
-
+        // Navigate to the selected feature;
+        view.goTo(featuresMap[featureId]);
+    };
   });
 });

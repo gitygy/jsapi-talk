@@ -135,7 +135,7 @@ view.whenLayerView(hoods).then((lyrView: __esri.FeatureLayerView) => {
 const select = document.getElementById("selectNeighborhood") as HTMLInputElement;
 select.onchange = (e) => {
   const featureId = select.value;
-  const expr = select.value === "" ? "" : "OBJECTID_1 = '" + featureId + "'";
+  const expr = select.value === "" ? "" : `OBJECTID_1 = '${featureId}'`;
   hoods.definitionExpression = expr;
   view.goTo(featuresMap[featureId]);
 };

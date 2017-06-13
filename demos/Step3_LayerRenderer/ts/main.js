@@ -33,7 +33,7 @@ define(["require", "exports", "esri/Color", "esri/layers/FeatureLayer", "esri/Ma
     });
     var beaches = new FeatureLayer({
         renderer: beachRenderer,
-        url: "http://services.arcgis.com/oxInpRhVIBxlo4pO/arcgis/rest/services/Beaches/FeatureServer/0",
+        url: "http://services.arcgis.com/oxInpRhVIBxlo4pO/arcgis/rest/services/Beaches/FeatureServer/0"
     });
     var hoods = new FeatureLayer({
         opacity: 0.50,

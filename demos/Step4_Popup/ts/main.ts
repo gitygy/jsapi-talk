@@ -8,7 +8,7 @@ import * as MapView from "esri/views/MapView";
 import * as Popup from "esri/widgets/Popup";
 
 const lifeSym = new SimpleMarkerSymbol({
-color: new Color("#4AB541"),
+    color: new Color("#4AB541"),
     outline: {
         color: new Color([255, 255, 255, 0.50]),
         width: 2

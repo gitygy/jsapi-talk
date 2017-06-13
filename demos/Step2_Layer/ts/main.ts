@@ -20,7 +20,7 @@ const map = new Map({
 });
 
 poi.watch("loadStatus", (status) => {
-    console.log("'" + poi.title + "'" + " " + status);
+    console.log(`'${poi.title}' ${status}`);
     if (status === "failed") {
         console.log(poi.loadError);
     }

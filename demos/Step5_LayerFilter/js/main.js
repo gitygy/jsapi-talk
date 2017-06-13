@@ -15,24 +15,22 @@ require([
 
   // Symbol for beaches with Lifeguards
   var lifeSym = new SimpleMarkerSymbol({
-    size: 14,
     color: "#4AB541",
-    width: 7,
     outline: { // Autocasts as new SimpleLineSymbol()
       color: [255, 255, 255, 0.50], // Autocasts as new Color()
       width: 2
-    }
+    },
+    size: 14
   });
 
   // Symbol for beaches without Lifeguards
   var nolifeSym = new SimpleMarkerSymbol({
-    size: 14,
     color: "#E17D1E",
-    width: 7,
     outline: { // Autocasts as new SimpleLineSymbol()
       color: [255, 255, 255, 0.50], // Autocasts as new Color()
       width: 2
-    }
+    },
+    size: 14
   });
 
   /******************************************************************
@@ -46,8 +44,8 @@ require([
    ******************************************************************/
 
   var beachRenderer = new UniqueValueRenderer({
-    defaultSymbol: lifeSym,
     defaultLabel: "Beaches with lifeguards",
+    defaultSymbol: lifeSym,
     field: "Lifeguards",
     uniqueValueInfos: [{
       value: "Y",
@@ -61,7 +59,6 @@ require([
   });
 
   var popupTemplate = new PopupTemplate({
-    title: "<b>Beach: {NAME}</b>",
     // Step 2: Specify the content, first set the display fields
     content: [{
       type: "fields",
@@ -96,26 +93,26 @@ require([
           sourceURL: "{Image}"
         }
       }]
-    }]
+    }],
+    title: "<b>Beach: {NAME}</b>"
   });
 
   // Create beaches featurelayer and set the renderer on the layer
   var beaches = new FeatureLayer({
-    url: "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/San_Diego_Beaches/FeatureServer/0",
-
     // Specify the outfields for the featurelayer in addition to passing in the template created above
     outFields: ["*"],
     popupTemplate: popupTemplate,
 
     // set renderer
-    renderer: beachRenderer
+    renderer: beachRenderer,
+    url: "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/San_Diego_Beaches/FeatureServer/0"
   });
 
   // Create Neighborhoods featurelayer and set opacity on layer
   var hoods = new FeatureLayer({
-    url: "http://services.arcgis.com/OUDgwkiMsqiL8Tvp/arcgis/rest/services/NewSDNeighborhoods/FeatureServer/0",
     // set opacity
-    opacity: 0.50
+    opacity: 0.50,
+    url: "http://services.arcgis.com/OUDgwkiMsqiL8Tvp/arcgis/rest/services/NewSDNeighborhoods/FeatureServer/0"
   });
 
   var map = new Map({
@@ -124,10 +121,9 @@ require([
   });
 
   var view = new MapView({
+    center: [-117.16866016384272, 32.776725339767964],
     container: "viewDiv",
     map: map,
-    zoom: 12,
-    center: [-117.16866016384272, 32.776725339767964],
 
     //Set the popup property in the MapView so that docking is enabled
     // and dockoptions are set. In this case, the popup can be docked to the
@@ -138,7 +134,8 @@ require([
         buttonEnabled: true,
         position: "bottom-right"
       }
-    }
+    },
+    zoom: 12
   });
   view.ui.add(dom.byId("container"), "top-right");
   /******************************************************************
@@ -164,10 +161,10 @@ require([
       features.forEach(function(feature) {
         var featureId = feature.attributes.OBJECTID_1;
         var uniqueVal = feature.attributes.NAME;
-        domConstruct.create("option", {
-          value: featureId,
-          innerHTML: uniqueVal
-        }, "selectNeighborhood");
+        var option = document.createElement("option");
+        option.value = featureId;
+        option.innerHTML = uniqueVal;
+        document.getElementById("selectNeighborhood").appendChild(option);
 
         featuresMap[featureId] = feature;
       });
@@ -175,13 +172,13 @@ require([
 
   // Step 4: Listen for the change event on the dropdown
   // and set the layer's definition expression to the chosen value
-  var select = dom.byId("selectNeighborhood");
-  on(select, "change", function(e) {
+  var select = document.getElementById("selectNeighborhood");
+  select.onchange = function(e) {
     var featureId = select.value;
     var expr = select.value === "" ? "" : "OBJECTID_1 = '" + featureId + "'";
     hoods.definitionExpression = expr;
 
     // Navigate to the selected feature;
     view.goTo(featuresMap[featureId]);
-  });
+  };
 });
