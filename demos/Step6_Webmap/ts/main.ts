@@ -16,7 +16,6 @@ const view = new MapView({
 });
 view.ui.add(document.getElementById("container"), "top-right");
 
-
 let hoodsLayerView: __esri.FeatureLayerView;
 const featuresMap = {};
 
