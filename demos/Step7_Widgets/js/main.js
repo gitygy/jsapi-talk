@@ -1,13 +1,9 @@
 require([
   "esri/WebMap",
   "esri/views/MapView",
-  "esri/core/watchUtils",
   "esri/widgets/Legend",
-  "dojo/dom-construct",
-  "dojo/on",
-  "dojo/dom",
   "dojo/domReady!"
-], function(WebMap, MapView, watchUtils, Legend, domConstruct, on, dom) {
+], function (WebMap, MapView, Legend) {
 
   var map = new WebMap({
     portalItem: { // autocast
@@ -22,14 +18,14 @@ require([
     zoom: 12
   });
 
-  view.ui.add(document.getElementById("container"), "top-right");
+
   /******************************************************************
    *
    * Widget example - Add legend widget
    *
    ******************************************************************/
 
-  view.then(function() {
+  view.then(function () {
     var beaches = map.layers.getItemAt(1);
     // Step 1: Create the widget
     var legend = new Legend({
@@ -44,45 +40,5 @@ require([
     // Step 3: Add the widget to the view's UI, specify the docking position as well
     view.ui.add(legend, "bottom-right");
   });
-  var hoodsLayerView;
-  var featuresMap = {};
 
-  view.then(function() {
-    var hoods = map.layers.getItemAt(0);
-
-    view.whenLayerView(hoods).then(function(lyrView) {
-      hoodsLayerView = lyrView;
-      // Make sure that the layer is not updating and currently fetching data
-      return watchUtils.whenFalseOnce(hoodsLayerView, "updating");
-    })
-      .then(function() {
-        // Step 3: Query all features in the layerview and return the results
-        return hoodsLayerView.queryFeatures();
-      })
-      .then(function(features) {
-        //  Build a dropdown for each unique value in Neighborhood field
-        features.forEach(function(feature) {
-          var featureId = feature.attributes.OBJECTID_1;
-          var uniqueVal = feature.attributes.NAME;
-          var option = document.createElement("option");
-          option.value = featureId;
-          option.innerHTML = uniqueVal;
-          document.getElementById("selectNeighborhood").appendChild(option);
-
-          featuresMap[featureId] = feature;
-        });
-      });
-
-    // Listen for the change event on the dropdown
-    // and set the layer's definition expression to the chosen value
-    var select = document.getElementById("selectNeighborhood");
-    select.onchange = function(e) {
-        var featureId = select.value;
-        var expr = select.value === "" ? "" : "OBJECTID_1 = '" + featureId + "'";
-        hoods.definitionExpression = expr;
-
-        // Navigate to the selected feature;
-        view.goTo(featuresMap[featureId]);
-    };
-  });
 });
