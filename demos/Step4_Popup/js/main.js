@@ -9,7 +9,7 @@ require([
 ], function (Map, FeatureLayer, MapView, UniqueValueRenderer, PopupTemplate, SimpleMarkerSymbol) {
 
   // Symbol for beaches with Lifeguards
-  var lifeSym = new SimpleMarkerSymbol({
+  var lifeguardSymbol = new SimpleMarkerSymbol({
     color: "#4AB541",
     outline: { // Autocasts as new SimpleLineSymbol()
       color: [255, 255, 255, 0.50], // Autocasts as new Color()
@@ -19,7 +19,7 @@ require([
   });
 
   // Symbol for beaches without Lifeguards
-  var nolifeSym = new SimpleMarkerSymbol({
+  var noLifeguardSymbol = new SimpleMarkerSymbol({
     color: "#E17D1E",
     outline: { // Autocasts as new SimpleLineSymbol()
       color: [255, 255, 255, 0.50], // Autocasts as new Color()
@@ -40,15 +40,15 @@ require([
 
   var beachRenderer = new UniqueValueRenderer({
     defaultLabel: "Beaches with lifeguards",
-    defaultSymbol: lifeSym,
+    defaultSymbol: lifeguardSymbol,
     field: "Lifeguards",
     uniqueValueInfos: [{
       label: "Beaches with lifeguards",
-      symbol: lifeSym,
+      symbol: lifeguardSymbol,
       value: "Y"
     }, {
       label: "Beaches without lifeguards on duty",
-      symbol: nolifeSym,
+      symbol: noLifeguardSymbol,
       value: "N"
     }]
   });

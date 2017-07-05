@@ -1,7 +1,7 @@
 define(["require", "exports", "esri/Color", "esri/layers/FeatureLayer", "esri/Map", "esri/PopupTemplate", "esri/renderers/UniqueValueRenderer", "esri/symbols/SimpleMarkerSymbol", "esri/views/MapView", "esri/widgets/Popup"], function (require, exports, Color, FeatureLayer, Map, PopupTemplate, UniqueValueRenderer, SimpleMarkerSymbol, MapView, Popup) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var lifeSym = new SimpleMarkerSymbol({
+    var lifeguardSymbol = new SimpleMarkerSymbol({
         color: new Color("#4AB541"),
         outline: {
             color: new Color([255, 255, 255, 0.50]),
@@ -9,7 +9,7 @@ define(["require", "exports", "esri/Color", "esri/layers/FeatureLayer", "esri/Ma
         },
         size: 14
     });
-    var nolifeSym = new SimpleMarkerSymbol({
+    var noLifeguardSymbol = new SimpleMarkerSymbol({
         color: new Color("#E17D1E"),
         outline: {
             color: new Color([255, 255, 255, 0.50]),
@@ -19,15 +19,15 @@ define(["require", "exports", "esri/Color", "esri/layers/FeatureLayer", "esri/Ma
     });
     var beachRenderer = new UniqueValueRenderer({
         defaultLabel: "Beaches with lifeguards",
-        defaultSymbol: lifeSym,
+        defaultSymbol: lifeguardSymbol,
         field: "Lifeguards",
         uniqueValueInfos: [{
                 label: "Beaches with lifeguards",
-                symbol: lifeSym,
+                symbol: lifeguardSymbol,
                 value: "Y"
             }, {
                 label: "Beaches without lifeguards on duty",
-                symbol: nolifeSym,
+                symbol: noLifeguardSymbol,
                 value: "N"
             }]
     });
