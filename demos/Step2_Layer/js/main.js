@@ -1,9 +1,9 @@
 require([
   "esri/Map",
-  "esri/layers/FeatureLayer",
   "esri/views/MapView",
+  "esri/layers/FeatureLayer",
   "dojo/domReady!"
-], function (Map, FeatureLayer, MapView) {
+], function (Map, MapView, FeatureLayer) {
 
   /******************************************************************
    *

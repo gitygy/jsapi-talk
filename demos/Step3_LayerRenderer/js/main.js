@@ -1,11 +1,11 @@
 require([
     "esri/Map",
-    "esri/layers/FeatureLayer",
     "esri/views/MapView",
+    "esri/layers/FeatureLayer",
     "esri/renderers/UniqueValueRenderer",
     "esri/symbols/SimpleMarkerSymbol",
     "dojo/domReady!"
-], function(Map, FeatureLayer, MapView, UniqueValueRenderer, SimpleMarkerSymbol) {
+], function(Map, MapView, FeatureLayer, UniqueValueRenderer, SimpleMarkerSymbol) {
 
     /******************************************************************
      *
