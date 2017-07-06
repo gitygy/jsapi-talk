@@ -32,18 +32,18 @@ require([
     basemap: "topo",
     layers: [hoods, poi, beaches]
   });
-
   //Option 2: use map.add method for single layer or addMany for multiple
   //  map.addMany([hoods, poi]);
+
   poi.watch("loadStatus", function (status) {
-    // status types not-loaded, loading, loaded, failed
-    console.log("'" + poi.title + "'" + " " + status);
+    // status types: "not-loaded", "loading", "loaded", "failed"
+    console.log(poi.title + " " + status);
     if (status === "failed") {
       console.log(poi.loadError);
     }
   });
 
-  view = new MapView({
+  var view = new MapView({
     center: [-117.16866016384272, 32.776725339767964],
     container: "viewDiv",
     map: map,
